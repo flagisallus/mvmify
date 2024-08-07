@@ -38,35 +38,35 @@ void tokenize_file(const string &source, set<string> &tokens){
     }
 }
 
-//Generates required number of permutations of the word 'yeet' 
-set<string> generate_yeets(int num_yeets){
+//Generates required number of permutations of the word 'mvm' 
+set<string> generate_mvms(int num_mvms){
     //we are using std::set because they ensure that words won't be repeated
-    set<string> yeets;
-    while(yeets.size() < num_yeets){
-        string s = "y";
-        int rand_length = rand() % ((int)log2(num_yeets)) + 1;
+    set<string> mvms;
+    while(mvms.size() < num_mvms){
+        string s = "m";
+        int rand_length = rand() % ((int)log2(num_mvms)) + 1;
         int t_count = rand() % (rand_length);
         int e_count = rand_length - t_count;
         //generates unique string and adds to set
         for(int i = 0; i < e_count; ++i){
-            if(rand() % 2 == 1) s += "e";
-            else s += "E";
+            if(rand() % 2 == 1) s += "v";
+            else s += "V";
         }
         for(int i = 0; i < t_count; ++i){
-            if(rand() % 2 == 1) s += "t";
-            else s+= "T";        
+            if(rand() % 2 == 1) s += "m";
+            else s+= "M";        
         }
-        yeets.insert(s);
+        mvms.insert(s);
     }
-    return yeets;
+    return mvms;
 }
 
-void yeetify_file(const string &source, map<string, string> &map){
+void mvmify_file(const string &source, map<string, string> &map){
     //create ifstream and ofstrea
     ifstream fin;
     fin.open(source);
     ofstream fout;
-    fout.open(get_filename(source)+"_yeetified" + get_extension(source));
+    fout.open(get_filename(source)+"_mvmified" + get_extension(source));
 
     //keep any skipped lines identical to the way they were before
     string token;
@@ -77,9 +77,9 @@ void yeetify_file(const string &source, map<string, string> &map){
     }
     fout << endl;
 
-    //now that we're below any directives, create #define mapping from yeets to tokens so the code can actually compile
+    //now that we're below any directives, create #define mapping from mvms to tokens so the code can actually compile
     for(auto pair : map){
-        //in reverse order since we want to go from yeet to token during compilation
+        //in reverse order since we want to go from mvm to token during compilation
         fout << "#define " << pair.second << " " << pair.first << endl;
     }
     fout << endl;
@@ -100,7 +100,7 @@ int main(int argc, char* argv[]){
 
     //checks inputs and gathers user intent
     if(argc != 2){
-        cout << "Need exactly 1 argument to yeetify command" << endl;
+        cout << "Need exactly 1 argument to mvmify command" << endl;
         cout << "Usage: "<< argv[0] << " FILENAME" << endl;
         return 1;
     }
@@ -123,23 +123,23 @@ int main(int argc, char* argv[]){
     }
 
     //determines how many unique permutations of word will be needed
-    int num_yeets = tokens.size();
+    int num_mvms = tokens.size();
 
     //gets generated words from generator function
-    set<string> yeets = generate_yeets(num_yeets);
+    set<string> mvms = generate_mvms(num_mvms);
 
     //create map from token to word using iterators over each set
-    map<string, string> yeet_map;
-    int size = tokens.size(); //since we know that yeets and tokens must have same size
+    map<string, string> mvm_map;
+    int size = tokens.size(); //since we know that mvms and tokens must have same size
     auto token = tokens.begin(); 
-    auto yeet = yeets.begin();
+    auto mvm = mvms.begin();
     for(int i = 0; i < size; ++i){ //run loop for each element in the tokens set
-        yeet_map[*token] = *yeet;
+        mvm_map[*token] = *mvm;
         ++token;
-        ++yeet;
+        ++mvm;
     }
 
-    //now that we have map, we can finally convert each token to its 'yeet' counterpart
-    yeetify_file(path, yeet_map);
+    //now that we have map, we can finally convert each token to its 'mvm' counterpart
+    mvmify_file(path, mvm_map);
 
 }
